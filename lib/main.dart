@@ -1,4 +1,6 @@
+import 'package:clubinformation/club_detail.dart';
 import 'package:flutter/material.dart';
+import 'club.dart';
 
 void main() {
   runApp(const ClubInfo());
@@ -47,8 +49,49 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: SafeArea(
-        child: Text('Football Club Information')
+        child: ListView.builder(
+            itemCount: Club.samples.length,
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ClubDetail(club: Club.samples[index]);
+                      },
+                    ),
+                  );
+                },
+                child: buildClubCard(Club.samples[index]),
+              );
+            }),
       ),
     );
   }
+}
+
+// Style of the club card
+Widget buildClubCard(Club club) {
+  return Card(
+    elevation: 2.0,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(children: <Widget>[
+        Image(image: AssetImage(club.imageUrl)),
+        const SizedBox(
+          height: 14.0,
+        ),
+        Text(
+          club.name,
+          style: const TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Palatino',
+          )
+        )
+      ],),
+    )
+  );
 }
